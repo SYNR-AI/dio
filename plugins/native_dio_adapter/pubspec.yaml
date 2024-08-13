@@ -24,7 +24,7 @@ dependencies:
   cupertino_http:
     git:
       url: git@github.com:SYNR-AI/http.git
-      ref: 00e2d6487479b61970e6f412dae8c0537d96afab
+      ref: 85188eca487fd2c989807f962448dce6d22ed886
       path: pkgs/cupertino_http
   cronet_http: '>=0.4.0 <=2.0.0'
   http: ^1.0.0
