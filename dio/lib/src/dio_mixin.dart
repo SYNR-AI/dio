@@ -560,8 +560,11 @@ abstract class DioMixin implements Dio {
           reqOpt,
           responseBody,
         );
-        DioHttpMetrics? metrics = responseBody.getMetricsCallback?.call();
-        responseBody.getMetricsCallback = null;
+        if (reqOpt.responseType != ResponseType.stream) {
+          DioHttpMetrics? metrics = responseBody.getMetricsCallback?.call();
+          responseBody.getMetricsCallback = null;
+          ret.metrics = metrics;
+        }
         // Make the response as null before returned as JSON.
         if (data is String &&
             data.isEmpty &&
@@ -571,7 +574,6 @@ abstract class DioMixin implements Dio {
           data = null;
         }
         ret.data = data;
-        ret.metrics = metrics;
       } else {
         responseBody.close();
       }
@@ -758,7 +760,9 @@ abstract class DioMixin implements Dio {
         statusMessage: response.statusMessage,
         extra: response.extra
       );
-      realResponse.metrics = response.metrics;
+      if (requestOptions.responseType != ResponseType.stream) {
+        realResponse.metrics = response.metrics;
+      }
       return realResponse;
     }
     return response;
