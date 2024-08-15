@@ -21,11 +21,7 @@ dependencies:
     sdk: flutter
 
   dio: ^5.4.0
-  cupertino_http:
-    git:
-      url: git@github.com:SYNR-AI/http.git
-      ref: a58f38f3f66fe10981cda504ea2e432ed7efdf78
-      path: pkgs/cupertino_http
+  cupertino_http: ^1.5.1
   cronet_http: '>=0.4.0 <=2.0.0'
   http: ^1.0.0
 
