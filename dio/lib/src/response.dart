@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'headers.dart';
 import 'options.dart';
 import 'redirect_record.dart';
+import 'metircs.dart';
 
 /// The [Response] class contains the payload (could be transformed)
 /// that respond from the request, and other information of the response.
 ///
 /// The object is not sealed or immutable, which means it can be manipulated
 /// in anytime, typically by [Interceptor] and [Transformer].
+
+
 class Response<T> {
   Response({
     this.data,
@@ -65,6 +68,9 @@ class Response<T> {
   /// The field is designed to be non-identical with
   /// [Options.extra] and [RequestOptions.extra].
   Map<String, dynamic> extra;
+
+
+  DioHttpMetrics? metrics;
 
   @override
   String toString() {

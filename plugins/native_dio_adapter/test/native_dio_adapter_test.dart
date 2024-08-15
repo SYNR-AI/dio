@@ -20,10 +20,9 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    NativeDioAdapter nativeDioAdapterPlugin = NativeDioAdapter();
-    MockNativeDioAdapterPlatform fakePlatform = MockNativeDioAdapterPlatform();
+    final MockNativeDioAdapterPlatform fakePlatform = MockNativeDioAdapterPlatform();
     NativeDioAdapterPlatform.instance = fakePlatform;
 
-    expect(await nativeDioAdapterPlugin.getPlatformVersion(), '42');
+    expect(await initialPlatform.getPlatformVersion(), '42');
   });
 }

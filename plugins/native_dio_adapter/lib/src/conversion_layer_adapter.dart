@@ -81,12 +81,33 @@ extension on StreamedResponse {
         [e.value],
       ),
     );
-    return ResponseBody(
+    final ResponseBody responseBody =  ResponseBody(
       stream.cast<Uint8List>(),
       statusCode,
       headers: Map.fromEntries(dioHeaders),
       isRedirect: isRedirect,
       statusMessage: reasonPhrase,
     );
+    responseBody.getMetricsCallback = () => toDioHttpMetrics();
+    return responseBody;
   }
+
+  DioHttpMetrics toDioHttpMetrics() {
+    final dioHttpMetrics = DioHttpMetrics()
+        ..requestStartMs = metrics?.requestStartMs
+        ..dnsStartMs = metrics?.dnsStartMs
+        ..dnsEndMs = metrics?.dnsEndMs
+        ..connectStartMs = metrics?.connectStartMs
+        ..connectEndMs = metrics?.connectEndMs
+        ..sslStartMs = metrics?.sslStartMs
+        ..sslEndMs = metrics?.sslEndMs
+        ..sendingStartMs = metrics?.sendingStartMs
+        ..sendingEndMs = metrics?.sendingEndMs
+        ..responseStartMs = metrics?.responseStartMs
+        ..responseEndMs = metrics?.responseEndMs
+        ..totalTimeMs = metrics?.totalTimeMs??0
+        ..isSocketReuse = metrics?.isSocketReuse??false;
+    return dioHttpMetrics;
+  }
+
 }

@@ -20,6 +20,7 @@ import 'progress_stream/io_progress_stream.dart'
 import 'response.dart';
 import 'response/response_stream_handler.dart';
 import 'transformer.dart';
+import 'metircs.dart';
 
 part 'interceptor.dart';
 
@@ -559,6 +560,8 @@ abstract class DioMixin implements Dio {
           reqOpt,
           responseBody,
         );
+        DioHttpMetrics? metrics = responseBody.getMetricsCallback?.call();
+        responseBody.getMetricsCallback = null;
         // Make the response as null before returned as JSON.
         if (data is String &&
             data.isEmpty &&
@@ -568,6 +571,7 @@ abstract class DioMixin implements Dio {
           data = null;
         }
         ret.data = data;
+        ret.metrics = metrics;
       } else {
         responseBody.close();
       }
@@ -744,7 +748,7 @@ abstract class DioMixin implements Dio {
       } else {
         headers = response.headers;
       }
-      return Response<T>(
+      var realResponse = Response<T>(
         data: data,
         headers: headers,
         requestOptions: response.requestOptions,
@@ -752,8 +756,10 @@ abstract class DioMixin implements Dio {
         isRedirect: response.isRedirect,
         redirects: response.redirects,
         statusMessage: response.statusMessage,
-        extra: response.extra,
+        extra: response.extra
       );
+      realResponse.metrics = response.metrics;
+      return realResponse;
     }
     return response;
   }

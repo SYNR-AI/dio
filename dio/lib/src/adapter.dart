@@ -8,6 +8,7 @@ import 'adapters/io_adapter.dart'
 import 'headers.dart';
 import 'options.dart';
 import 'redirect_record.dart';
+import 'metircs.dart';
 
 /// {@template dio.HttpClientAdapter}
 /// [HttpAdapter] is a bridge between [Dio] and [HttpClient].
@@ -116,6 +117,8 @@ class ResponseBody {
 
   /// The extra field which will pass-through to the [Response.extra].
   Map<String, dynamic> extra = {};
+
+  DioHttpMetrics? Function()? getMetricsCallback;
 
   final void Function()? _onClose;
 

@@ -35,6 +35,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late final Dio dio;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    dio = Dio();
+
+    dio.httpClientAdapter = NativeAdapter(
+        createCupertinoConfiguration: () =>
+    URLSessionConfiguration.ephemeralSessionConfiguration()
+      ..allowsCellularAccess = false
+      ..allowsConstrainedNetworkAccess = false
+      ..allowsExpensiveNetworkAccess = false
+      ..timeoutIntervalForRequest = const Duration(seconds: 30)
+      ..timeoutIntervalForResource = const Duration(seconds: 30));
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,17 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _doGetRequest() async {
-    final dio = Dio();
-
-    dio.httpClientAdapter = NativeAdapter(
-      createCupertinoConfiguration: () =>
-          URLSessionConfiguration.ephemeralSessionConfiguration()
-            ..allowsCellularAccess = false
-            ..allowsConstrainedNetworkAccess = false
-            ..allowsExpensiveNetworkAccess = false,
-    );
     final response = await dio.get<String>('https://flutter.dev');
-
+    print('doGetRequest metric = ${response.metrics}');
     await showDialog<void>(
       context: context,
       builder: (context) {
@@ -98,22 +107,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _doPostRequest() async {
-    final dio = Dio();
-
-    dio.httpClientAdapter = NativeAdapter(
-      createCupertinoConfiguration: () =>
-          URLSessionConfiguration.ephemeralSessionConfiguration()
-            ..allowsCellularAccess = false
-            ..allowsConstrainedNetworkAccess = false
-            ..allowsExpensiveNetworkAccess = false,
-    );
     final response = await dio.post<String>(
       'https://httpbin.org/post',
       queryParameters: <String, dynamic>{'foo': 'bar'},
       data: jsonEncode(<String, dynamic>{'foo': 'bar'}),
       options: Options(headers: <String, dynamic>{'foo': 'bar'}),
     );
-
+    print('doGetRequest metric = ${response.metrics}');
     await showDialog<void>(
       context: context,
       builder: (context) {
