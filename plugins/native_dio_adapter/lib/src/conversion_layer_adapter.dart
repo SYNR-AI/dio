@@ -23,6 +23,8 @@ class ConversionLayerAdapter implements HttpClientAdapter {
     Future<dynamic>? cancelFuture,
   ) async {
     final request = await _fromOptionsAndStream(options, requestStream);
+    request.connectTimeout = options.connectTimeout;   // for cronet
+    request.receiveTimeout = options.receiveTimeout;  // for cronet
     final response = await client.send(request);
     return response.toDioResponseBody(options);
   }
